@@ -3,6 +3,6 @@ const actions = require('./actions')
 
 JoystickLib.getJoystick().then(joystick => {
   joystick.on('release', direction => {
-    actions[direction]()
+    actions[direction] && actions[direction]()
   })
 })
