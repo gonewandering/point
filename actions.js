@@ -29,8 +29,7 @@ module.exports = {
       cp.exec('npm install', (err, stout, sterr) => {
         leds.set('update3')
         console.log('2. Installed Dependencies')
-      }
-      process.exit(1)
+      })
     })
   },
   right: () => {
