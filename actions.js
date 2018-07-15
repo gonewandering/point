@@ -16,6 +16,7 @@ actions.start = () => {
 actions.up = () => {
   sensors.track(data => {
     leds.set('send')
+    console.log(data)
 
     let evs = [
       log.send({label: 'z-axis', value: data.accel.Z }),
