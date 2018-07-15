@@ -14,9 +14,11 @@ actions.start = () => {
 },
 
 actions.up = () => {
-  sensors.track(data => {
-    leds.set('send')
+  var col = 'send'
 
+  sensors.track(data => {
+    col = 'send' ? 'arrow' : 'send'
+    leds.set(col)
     let evs = [
       log.send({label: 'z-acc', value: data.accel.x }),
       log.send({label: 'y-acc', value: data.accel.y }),
@@ -27,11 +29,7 @@ actions.up = () => {
       log.send({label: 'temperature', value: data.temperature }),
       log.send({label: 'pressure', value: data.pressure })
     ]
-
-    Promise.all(evs).then(leds.set.bind(null, 'arrow')).catch(console.log)
   })
-
-  leds.set('arrow')
 },
 
 actions.down = () => {
