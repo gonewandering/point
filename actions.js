@@ -25,7 +25,7 @@ module.exports = {
     console.log('starting update')
     cp.exec('git pull origin master && npm install', (err, stout, sterr) => {
       console.log(err, stout, sterr)
-      process.exit()
+      process.exit(1)
     })
   }
 }
