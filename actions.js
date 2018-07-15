@@ -7,6 +7,9 @@ var act = function () { }
 sensors.monitor()
 
 module.exports = {
+  start: () => {
+    leds.set('circle')
+  },
   up: () => {
     sensors.track(console.log)
     leds.set('arrow')
