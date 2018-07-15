@@ -1,7 +1,7 @@
 const leds = require('./lib/leds')
 const Sensors = require('./lib/sensors')
 const sensors = new Sensors(500)
-const exec = require('child_process')
+const cp = require('child_process')
 
 var act = function () { }
 sensors.monitor()
@@ -18,7 +18,7 @@ module.exports = {
   },
   left: () => {
     leds.set('update')
-    exec('git pull origin master && npm install', () => {
+    cp.exec('git pull origin master && npm install', () => {
       process.exit()
     })
   }
