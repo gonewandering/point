@@ -3,37 +3,52 @@ const Sensors = require('./lib/sensors')
 const sensors = new Sensors(500)
 const cp = require('child_process')
 const process = require('process')
+const Log = require('./lib/log')
+const log = new Log()
+const actions = {}
 
-var act = function () { }
 sensors.monitor()
 
-module.exports = {
-  start: () => {
-    leds.set('circle')
-  },
-  up: () => {
-    sensors.track(console.log)
-    leds.set('arrow')
-  },
-  down: () => {
-    sensors.track()
-    act = function () { }
-    leds.set('cross')
-  },
-  left: () => {
-    leds.set('update')
-    console.log('starting update')
-    cp.exec('git pull origin master', (err, stout, sterr) => {
-      leds.set('update2')
-      console.log('1. Pulled latest version')
-      cp.exec('npm install', (err, stout, sterr) => {
-        leds.set('update3')
-        console.log('2. Installed Dependencies')
-      })
+actions.start = () => {
+  leds.set('circle')
+},
+
+actions.up = () => {
+  sensors.track(data => {
+    leds.set('send')
+
+    let evs = [
+      log.send({label: 'z-axis', value: data.accel.Z }),
+      log.send({label: 'y-axis', value: data.accel.Y }),
+      log.send({label: 'x-axis', value: data.accel.X }),
+      log.send({label: 'temperature', value: data.temperature }),
+      log.send({label: 'pressure', value: data.pressure })
+    ]
+
+    Promise.all(evs).then(labels.set.bind(null, 'arrow'))
+  })
+
+  leds.set('arrow')
+},
+
+actions.down = () => {
+  sensors.track()
+  leds.set('cross')
+},
+
+actions.left = () => {
+  leds.set('update')
+  cp.exec('git pull origin master', (err, stout, sterr) => {
+    leds.set('update2')
+    cp.exec('npm install', (err, stout, sterr) => {
+      leds.set('update3')
     })
-  },
-  right: () => {
-    leds.set('blank')
-    process.exit(1)
-  }
+  })
+},
+
+actions.right = () => {
+  leds.set('blank')
+  process.exit(1)
 }
+
+module.exports = actions
