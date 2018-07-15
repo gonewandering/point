@@ -1,6 +1,6 @@
 const leds = require('./lib/leds')
 const Sensors = require('./lib/sensors')
-const sensors = new Sensors(500)
+const sensors = new Sensors(2000)
 const cp = require('child_process')
 const process = require('process')
 const Log = require('./lib/log')
@@ -19,9 +19,12 @@ actions.up = () => {
     console.log(data)
 
     let evs = [
-      log.send({label: 'z-axis', value: data.accel.Z }),
-      log.send({label: 'y-axis', value: data.accel.Y }),
-      log.send({label: 'x-axis', value: data.accel.X }),
+      log.send({label: 'z-acc', value: data.accel.x }),
+      log.send({label: 'y-acc', value: data.accel.y }),
+      log.send({label: 'x-acc', value: data.accel.z }),
+      log.send({label: 'z-angle', value: data.gyro.x }),
+      log.send({label: 'y-angle', value: data.gyro.y }),
+      log.send({label: 'x-angle', value: data.gyro.z }),
       log.send({label: 'temperature', value: data.temperature }),
       log.send({label: 'pressure', value: data.pressure })
     ]
