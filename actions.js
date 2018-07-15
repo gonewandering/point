@@ -24,7 +24,7 @@ module.exports = {
   },
   left: () => {
     leds.set('update')
-    exec('git pull origin master').then(() => {
+    exec('git pull origin master', () => {
       process.exit()
     })
   }
