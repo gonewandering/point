@@ -25,7 +25,7 @@ actions.up = () => {
       log.send({label: 'pressure', value: data.pressure })
     ]
 
-    Promise.all(evs).then(labels.set.bind(null, 'arrow'))
+    Promise.all(evs).then(labels.set.bind(null, 'arrow')).catch(console.log)
   })
 
   leds.set('arrow')
