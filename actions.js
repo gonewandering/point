@@ -1,54 +1,51 @@
-const leds = require('./lib/leds')
 const Sensors = require('./lib/sensors')
-const sensors = new Sensors(2000)
-const cp = require('child_process')
-const process = require('process')
 const Log = require('./lib/log')
+const schemes = require('./schemes')
+const leds = require('./lib/leds')
+const exec = require('./lib/hlp/exec')
+const process = require('process')
+const config = require('./config')
+
+const sensors = new Sensors(config.interval)
 const log = new Log()
 const actions = {}
 
-sensors.monitor()
+actions.start = function () {
+  leds.set('idle')
+  log.on()
+}
 
-actions.start = () => {
-  leds.set('circle')
-},
+actions.up = function () {
+  leds.set('track')
+  log.start()
 
-actions.up = () => {
-  var col = 'send'
-
-  sensors.track(data => {
-    col = 'send' ? 'arrow' : 'send'
-    leds.set(col)
-    let evs = [
-      log.send({label: 'z-acc', value: data.accel.x }),
-      log.send({label: 'y-acc', value: data.accel.y }),
-      log.send({label: 'x-acc', value: data.accel.z }),
-      log.send({label: 'z-angle', value: data.gyro.x }),
-      log.send({label: 'y-angle', value: data.gyro.y }),
-      log.send({label: 'x-angle', value: data.gyro.z }),
-      log.send({label: 'temperature', value: data.temperature }),
-      log.send({label: 'pressure', value: data.pressure })
-    ]
+  schemes[config.scheme.type]({
+    sensors: sensors,
+    log: log,
+    options: config.scheme
   })
-},
+}
 
-actions.down = () => {
-  sensors.track()
-  leds.set('cross')
-},
+actions.down = function () {
+  leds.set('idle')
+  sensors.pause()
+  log.pause()
+}
 
-actions.left = () => {
-  leds.set('update')
-  cp.exec('git pull origin master', (err, stout, sterr) => {
-    leds.set('update2')
-    cp.exec('npm install', (err, stout, sterr) => {
-      leds.set('update3')
-    })
-  })
-},
+actions.left = function () {
+  leds.set('update1')
+  log.update()
 
-actions.right = () => {
-  leds.set('blank')
+  return exec('git pull origin master')
+    .then(leds.set.bind(null, 'update2'))
+    .then(exec.bind(null, 'npm install')
+    .then(leds.set.bind(null, 'update3'))
+}
+
+actions.right = function () {
+  leds.set('idle')
+  log.restart()
+
   process.exit(1)
 }
 
