@@ -1,7 +1,7 @@
 const JoystickLib = require('node-sense-hat').Joystick;
 const dev = require('point-device-sdk')
 const motions = require('./motions')
-const actions = require9'./actions')
+const actions = require('./actions')
 
 const setupJoystick = async () => {
   let joystick = await JoystickLib.getJoystick()
