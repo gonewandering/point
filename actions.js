@@ -1,50 +1,56 @@
-const Sensors = require('./lib/sensors')
-const Log = require('./lib/log')
+const device = require('point-device-sdk')
+const sensors = require('./lib/sensors')
 const schemes = require('./schemes')
 const leds = require('./lib/leds')
 const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
 
-const sensors = new Sensors(config.interval)
 const log = new Log()
 const actions = {}
 
-actions.start = function () {
+actions.on = function () {
   leds.set('idle')
-  log.on()
+  device.status.send('on')
 }
 
-actions.up = function () {
+actions.track = function () {
   leds.set('track')
-  log.start()
+  device.status.send('tracking')
 
-  schemes[config.scheme.type]({
-    sensors: sensors,
-    log: log,
-    options: config.scheme
+  sensors.on(res => {
+    if (res.rp % 10 == 0) {
+      device.log.send({device: { id: device.mid }, type: 'z-angle', value: data.gyro.x }),
+      device.log.send({device: { id: device.mid }, type: 'y-angle', value: data.gyro.y }),
+      device.log.send({device: { id: device.mid }, type: 'x-angle', value: data.gyro.z }),
+      device.log.send({device: { id: device.mid }, type: 'temperature', value: data.temperature }),
+      device.log.send({device: { id: device.mid }, type: 'pressure', value: data.pressure })
+    }
   })
 }
 
-actions.down = function () {
+actions.pause = function () {
   leds.set('idle')
+  device.status.send('paused')
   sensors.pause()
-  log.pause()
 }
 
-actions.left = function () {
+actions.update = async function () {
   leds.set('update1')
-  log.update()
 
-  return exec('git pull origin master')
-    .then(leds.set.bind(null, 'update2'))
-    .then(exec.bind(null, 'npm install')
-    .then(leds.set.bind(null, 'update3'))
+  await device.status.send('updating')
+  await exec('git pull origin master')
+  await leds.set.bind(null, 'update2')
+  await exec.bind(null, 'npm install')
+  await leds.set.bind(null, 'update3')
+  await device.status.send('update-complete')
+
+  return
 }
 
-actions.right = function () {
+actions.restart = function () {
   leds.set('idle')
-  log.restart()
+  await device.status.send('restarting')
 
   process.exit(1)
 }
