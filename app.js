@@ -3,12 +3,12 @@ const dev = require('point-device-sdk')
 const motions = require('./motions')
 const actions = require('./actions')
 
-const setupJoystick = async () => {
+const setupJoystick = async function () {
   let joystick = await JoystickLib.getJoystick()
   joystick.on('release', motions)
 }
 
-const init = () => {
+const init = async function () {
   await setupJoystick()
 
   dev.commands.get(cmd => {
