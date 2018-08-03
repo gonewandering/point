@@ -1,6 +1,5 @@
 const dev = require('point-device-sdk')
 const sensors = require('./lib/sensors')
-const schemes = require('./schemes')
 const leds = require('./lib/leds')
 const exec = require('./lib/hlp/exec')
 const process = require('process')
