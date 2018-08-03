@@ -5,7 +5,6 @@ const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
 
-const log = new Log()
 const actions = {}
 
 actions.on = function () {
