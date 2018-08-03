@@ -5,7 +5,7 @@ const actions = require('./actions')
 
 const setupJoystick = async function () {
   let joystick = await JoystickLib.getJoystick()
-  joystick.on('release', (dir) {
+  joystick.on('release', dir => {
     motions[dir]()
   })
 }
