@@ -16,9 +16,10 @@ actions.track = function () {
   leds.set('track')
   dev.status.update('tracking')
 
+  sensors.track()
+  
   sensors.on(res => {
     if (res.rp % 10 == 0) {
-      console.log('logging')
       dev.log.send({event: 'z-angle', value: data.gyro.x }),
       dev.log.send({event: 'y-angle', value: data.gyro.y }),
       dev.log.send({event: 'x-angle', value: data.gyro.z }),
