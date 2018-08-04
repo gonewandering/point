@@ -17,14 +17,14 @@ actions.track = function () {
   dev.status.update('tracking')
 
   sensors.track()
-  
+
   sensors.on(res => {
-    if (res.rp % 10 == 0) {
-      dev.log.send({event: 'z-angle', value: data.gyro.x }),
-      dev.log.send({event: 'y-angle', value: data.gyro.y }),
-      dev.log.send({event: 'x-angle', value: data.gyro.z }),
-      dev.log.send({event: 'temperature', value: data.temperature }),
-      dev.log.send({event: 'pressure', value: data.pressure })
+    if (sensors.rp % 10 == 0) {
+      dev.log.send({event: 'z-angle', value: res.gyro.x }),
+      dev.log.send({event: 'y-angle', value: res.gyro.y }),
+      dev.log.send({event: 'x-angle', value: res.gyro.z }),
+      dev.log.send({event: 'temperature', value: res.temperature }),
+      dev.log.send({event: 'pressure', value: res.pressure })
     }
   })
 }
