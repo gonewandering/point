@@ -12,13 +12,12 @@ const setupJoystick = async function () {
 
 const init = async function () {
   await setupJoystick()
+
   dev.command.send('on')
-  
+
   dev.command.on('*', cmd => {
     actions[cmd] && actions[cmd]()
   })
-
-  dev.status.update('on')
 }
 
 init()

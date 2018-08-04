@@ -8,6 +8,7 @@ const config = require('./config')
 const actions = {}
 
 actions.on = function () {
+  console.log( `Starting device: ${dev.mid}`)
   leds.set('idle')
   dev.status.update('on')
 }
