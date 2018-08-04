@@ -18,7 +18,7 @@ actions.track = function () {
 
   sensors.on(res => {
     if (res.rp % 10 == 0) {
-      dev.log.send({timestamp: event: 'z-angle', value: data.gyro.x }),
+      dev.log.send({event: 'z-angle', value: data.gyro.x }),
       dev.log.send({event: 'y-angle', value: data.gyro.y }),
       dev.log.send({event: 'x-angle', value: data.gyro.z }),
       dev.log.send({event: 'temperature', value: data.temperature }),
