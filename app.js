@@ -17,7 +17,7 @@ const init = async function () {
     actions[cmd] && actions[cmd]()
   })
 
-  dev.status.send('on')
+  dev.status.update('on')
 }
 
 init()
