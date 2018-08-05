@@ -13,14 +13,22 @@ actions.on = function () {
   dev.status.update('on')
 }
 
+actions.config = async function (data) {
+  await dev.status.update('updating')
+  await dev.config.set(data)
+  await dev.status.update('idle')
+}
+
 actions.track = function () {
   leds.set('track')
   dev.status.update('tracking')
 
+  let freq = Math.round((dev.config.get('freq') || 1000) / 100)
+
   sensors.track()
 
   sensors.on(res => {
-    if (sensors.rp % 10 == 0) {
+    if (sensors.rp % freg == 0) {
       dev.log.send({event: 'z-angle', value: res.gyro.x }),
       dev.log.send({event: 'y-angle', value: res.gyro.y }),
       dev.log.send({event: 'x-angle', value: res.gyro.z }),
