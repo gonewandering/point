@@ -25,9 +25,7 @@ actions.track = function () {
   sensors.track()
 
   sensors.on(res => {
-    if (sensors.rp % freg == 0) {
-      schemes["people"]()
-    }
+    schemes["people"](res)
   })
 }
 

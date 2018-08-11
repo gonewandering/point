@@ -8,8 +8,9 @@ module.exports = async function (url) {
     const grayImg = await img.bgrToGrayAsync()
     const { objects, numDetections } = await classifier.detectMultiScaleGpu(grayImg)
 
-    console.log(objects, numDetections)
-    await dev.log.send({event: 'z-angle', value: res.gyro.x })
+    if (objects.length > 0) {
+      await dev.log.send({event: 'people', value: objects.length })
+    }
   } catch (err) {
     console.error(err)
   }
