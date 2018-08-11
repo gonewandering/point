@@ -1,3 +1,3 @@
 module.exports = {
-  interval: require('./interval')
+  people: require('./people')
 }

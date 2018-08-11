@@ -3,6 +3,7 @@ const sensors = require('./lib/sensors')
 const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
+const schemes = require('./scheme')
 
 const actions = {}
 
