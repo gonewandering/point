@@ -12,7 +12,7 @@ actions.on = function () {
 }
 
 actions.config = async function (data) {
-  await dev.status.update('updating')
+  await dev.status.update('updating config')
   await dev.config.set(data)
   await dev.status.update('idle')
 }
@@ -37,7 +37,8 @@ actions.pause = function () {
 actions.update = async function () {
   leds.set('update1')
 
-  await dev.status.update('updating')
+  await dev.status.update('updating software')
+  await exec(`cd ${ __dirname }`)
   await exec('git pull origin master')
   await exec('npm install')
   await dev.status.update('update-complete')
@@ -47,7 +48,12 @@ actions.update = async function () {
 
 actions.restart = async function () {
   await dev.status.update('restarting')
-  process.exit(1)
+  await exec('sudo reboot')
+}
+
+actions.off = async function () {
+  await dev.status.update('off')
+  await exec('sudo shutdown -h now')
 }
 
 module.exports = actions
