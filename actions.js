@@ -14,7 +14,7 @@ actions.on = function () {
 actions.config = async function (data) {
   await dev.status.update('updating config')
   await dev.config.set(data)
-  await dev.status.update('idle')
+  await actions.restart
 }
 
 actions.track = function () {
