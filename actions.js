@@ -4,6 +4,7 @@ const leds = require('./lib/leds')
 const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
+const schemes = require('./schemes')
 
 const actions = {}
 
@@ -41,6 +42,7 @@ actions.config = async function (data) {
 }
 
 actions.track = function () {
+  let activeSchemes = dev.config.get('schemes')
   leds.status('tracking', true)
   leds.set('tracking')
   dev.status.update('tracking')
@@ -48,9 +50,12 @@ actions.track = function () {
   sensors.track()
 
   sensors.on(res => {
-    for(var s in dev.config.schemes) {
-      let scheme = dev.config.schemes[s]
-      schemes[scheme.name](res, scheme)
+    for(var s in activeSchemes) {
+      let scheme = activeSchemes[s]
+
+      if (schemes[scheme.name]) {
+        await schemes[scheme.name](res, scheme)
+      }
     }
   })
 }

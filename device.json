@@ -1,3 +1,8 @@
 {
-  "schemes": ["people"]
+  "schemes": [
+    {
+      "name": "people",
+      "freq": 1000
+    }
+  ]
 }
