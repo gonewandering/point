@@ -49,7 +49,7 @@ actions.track = async function () {
 
   sensors.track()
 
-  sensors.on(res => {
+  sensors.on(async res => {
     for(var s in activeSchemes) {
       let scheme = activeSchemes[s]
 
