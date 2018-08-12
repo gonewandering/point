@@ -1,52 +1,30 @@
 const dev = require('point-device-sdk')
 const sensors = require('./lib/sensors')
+const leds = require('./lib/leds')
 const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
-const schemes = require('./scheme')
 
 const actions = {}
 
-actions.on = function () {
-  dev.status.update('on')
-}
+actions.on = async function () {
+  let conn = await dev.network.connected(5000)
+  leds.status('on', true)
 
-actions.config = async function (data) {
-  await dev.status.update('updating config')
-  await dev.config.set(data)
-  await actions.restart
-}
+  if (conn) {
+    leds.status('network', true)
+  }
 
-actions.track = function () {
-  dev.status.update('tracking')
-
-  let freq = Math.round((dev.config.get('freq') || 1000) / 100)
-
-  sensors.track()
-
-  sensors.on(res => {
-    schemes["people"](res)
-  })
-}
-
-actions.pause = function () {
-  dev.status.update('paused')
-  sensors.pause()
-}
-
-actions.update = async function () {
-  leds.set('update1')
-
-  await dev.status.update('updating software')
-  await exec(`cd ${ __dirname }`)
-  await exec('git pull origin master')
-  await exec('npm install')
-  await dev.status.update('update-complete')
-
-  return
+  leds.status('ready', true)
+  leds.set('ready')
+  await dev.status.update('on')
 }
 
 actions.restart = async function () {
+  leds.status('ready', false)
+  leds.status('network', false)
+  leds.status('on', false)
+
   await dev.status.update('restarting')
   await exec('sudo reboot')
 }
@@ -54,6 +32,49 @@ actions.restart = async function () {
 actions.off = async function () {
   await dev.status.update('off')
   await exec('sudo shutdown -h now')
+}
+
+actions.config = async function (data) {
+  await dev.status.update('updating')
+  await dev.config.set(data)
+  await dev.status.update('ready')
+}
+
+actions.track = function () {
+  leds.status('tracking', true)
+  leds.set('tracking')
+  dev.status.update('tracking')
+
+  sensors.track()
+
+  sensors.on(res => {
+    for(var s in dev.config.schemes) {
+      let scheme = dev.config.schemes[s]
+      schemes[scheme.name](res, scheme)
+    }
+  })
+}
+
+actions.pause = function () {
+  leds.status('tracking', false)
+  leds.set('ready')
+
+  dev.status.update('ready')
+  sensors.pause()
+}
+
+actions.update = async function () {
+  leds.set('update1')
+
+  await dev.status.update('updating')
+  await exec(`cd ${ __dirname }`)
+  await exec('git pull origin master')
+  await leds.set('update2')
+  await exec('npm install')
+  await leds.set('update3')
+  await dev.status.update('update-complete')
+
+  await actions.restart()
 }
 
 module.exports = actions
