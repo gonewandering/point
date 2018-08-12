@@ -41,7 +41,7 @@ actions.config = async function (data) {
   await dev.status.update('ready')
 }
 
-actions.track = function () {
+actions.track = async function () {
   let activeSchemes = dev.config.get('schemes')
   leds.status('tracking', true)
   leds.set('tracking')
