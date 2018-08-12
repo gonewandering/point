@@ -9,6 +9,8 @@ const schemes = require('./schemes')
 const actions = {}
 
 actions.on = async function () {
+  await.dev.config.init()
+
   let conn = await dev.network.connected(5000)
   leds.status('on', true)
 
