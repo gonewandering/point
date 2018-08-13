@@ -9,10 +9,9 @@ const schemes = require('./schemes')
 const actions = {}
 
 actions.on = async function () {
-  await.dev.config.init()
-
   let conn = await dev.network.connected(5000)
   leds.status('on', true)
+  dev.config.init()
 
   if (conn) {
     leds.status('network', true)
@@ -43,21 +42,22 @@ actions.config = async function (data) {
   await dev.status.update('ready')
 }
 
-actions.track = async function () {
+actions.track = function () {
   let activeSchemes = dev.config.get('schemes')
+  console.log(activeSchemes)
+
   leds.status('tracking', true)
   leds.set('tracking')
   dev.status.update('tracking')
 
+  let freq = Math.round((dev.config.get('freq') || 1000) / 100)
+
   sensors.track()
 
-  sensors.on(async res => {
+  sensors.on(res => {
     for(var s in activeSchemes) {
       let scheme = activeSchemes[s]
-
-      if (schemes[scheme.name]) {
-        await schemes[scheme.name](res, scheme)
-      }
+      schemes[scheme.name](res, scheme)
     }
   })
 }
