@@ -44,13 +44,10 @@ actions.config = async function (data) {
 
 actions.track = function () {
   let activeSchemes = dev.config.get('schemes')
-  console.log(activeSchemes)
 
   leds.status('tracking', true)
   leds.set('tracking')
   dev.status.update('tracking')
-
-  let freq = Math.round((dev.config.get('freq') || 1000) / 100)
 
   sensors.track()
 

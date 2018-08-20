@@ -14,10 +14,12 @@
     "child_process": "^1.0.2",
     "node-machine-id": "^1.1.10",
     "node-sense-hat": "0.0.2",
+    "node-webcam": "^0.4.3",
     "opencv4nodejs": "^4.7.2",
     "pi-camera": "^1.1.0",
     "point-device-sdk": "git+https://github.com/gonewandering/point-device-sdk.git",
     "request-promise-native": "^1.0.5",
+    "sharp": "^0.20.5",
     "shorthash": "0.0.2",
     "underscore": "^1.9.1"
   }

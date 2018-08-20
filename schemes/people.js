@@ -1,15 +1,48 @@
-const cv = require('opencv4nodejs')
+const detector = require('../classer/app')
 const dev = require('point-device-sdk')
-const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT)
 
 module.exports = async function (url) {
-  try {
-    const img = await cv.imreadAsync(url)
-    const grayImg = await img.bgrToGrayAsync()
-    const { objects, numDetections } = await classifier.detectMultiScaleGpu(grayImg)
+  let results = await detector(url)
 
-    await dev.log.send({event: 'people', value: objects.length })
-  } catch (err) {
-    console.error(err)
+  for (var n in results) {
+    let r = results[n]
+
+    let dims = [{
+      label: 'object',
+      name: r.className
+    }]
+
+    let metrics = []
+
+    if (r.className == 'person') {
+      let age = null
+      let gender = null
+
+      for (var n in r.age) {
+        if(r.age[n] > .5) {
+          age = n
+        }
+      }
+
+      if (r.gender.male > .9 || r.gender.female > .9) {
+        gender = r.gender.male > .9 ? 'male' : 'female'
+      }
+
+      age && dims.push({
+        label: 'age',
+        name: age
+      })
+
+      gender && dims.push({
+        label: 'gender',
+        name: gender
+      })
+    }
+
+    await dev.log.send({
+      event: 'see',
+      value: r.confidence,
+      dimension: dims
+    })
   }
 }
