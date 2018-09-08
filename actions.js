@@ -5,7 +5,7 @@ const exec = require('./lib/hlp/exec')
 const process = require('process')
 const config = require('./config')
 const schemes = require('./schemes')
-
+var queue = 0
 const actions = {}
 
 actions.on = async function () {
@@ -51,11 +51,16 @@ actions.track = function () {
 
   sensors.track()
 
-  sensors.on(res => {
+  sensors.on(async res => {
+    if (queue > 0) { return }
+    queue += 1
+
     for(var s in activeSchemes) {
       let scheme = activeSchemes[s]
-      schemes[scheme.name](res, scheme)
+      await schemes[scheme.name](res, scheme)
     }
+
+    queue -= 1
   })
 }
 

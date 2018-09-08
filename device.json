@@ -1,8 +1,8 @@
 {
   "schemes": [
     {
-      "name": "people",
-      "freq": 1000
+    	"name": "cars",
+	"freq": 1000
     }
   ]
 }
