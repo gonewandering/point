@@ -1,4 +1,5 @@
 module.exports = {
   people: require('./people'),
-  cars: require('./cars')
+  cars: require('./cars'),
+  color: require('./color')
 }
