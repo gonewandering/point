@@ -1,17 +1,19 @@
 {
-  "name": "taro-point",
-  "version": "1.0.1",
+  "name": "point-device-see",
+  "version": "0.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {
     "start": "node app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postversion": "git push && git push --tags"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/pubsub": "^0.19.0",
     "child_process": "^1.0.2",
+    "color-thief": "^2.2.3",
     "node-machine-id": "^1.1.10",
     "node-sense-hat": "0.0.2",
     "node-webcam": "^0.4.3",

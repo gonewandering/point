@@ -1,9 +1,8 @@
 const cv = require('opencv4nodejs')
-const dev = require('point-device-sdk')
 const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_DEFAULT)
 const resizeImage = require('./resizeImage')
-const age = require('../classer/cv/age')
-const gender = require('../classer/cv/gender')
+const age = require('./age')
+const gender = require('./gender')
 
 async function detector (url) {
   var out = []
@@ -61,7 +60,7 @@ module.exports = async function (url) {
       name: gender
     })
 
-    await dev.log.send({
+    await this.log.send({
       event: 'person',
       value: 1,
       dimension: dims

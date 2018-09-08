@@ -2,7 +2,6 @@ const cv = require('opencv4nodejs')
 const path = require('path')
 const fs = require('fs')
 
-const dev = require('point-device-sdk')
 const classNames = require('/home/pi/point-device-see/schemes/cars/models/coco300_classNames')
 const ssdcocoModelPath = '/home/pi/point-device-see/schemes/cars/models'
 
@@ -58,20 +57,20 @@ const detector = async (img, opts) => {
     return results
 }
 
-module.exports = async function (url) { 
+module.exports = async function (url) {
 	let img = cv.imread(url)
-	
+
 	let results = await detector(img)
-        
-	results = results.filter(d => { 
-		if (d.className == 'car' && d.confidence > .05) { 
+
+	results = results.filter(d => {
+		if (d.className == 'car' && d.confidence > .05) {
 			return true
 		} else {
 			return false
 		}
 	})
 
-	dev.log.send({
+	this.log.send({
 		event: 'cars',
 		value: results.length
 	})
