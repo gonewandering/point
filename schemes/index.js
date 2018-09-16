@@ -1,5 +1,7 @@
 module.exports = {
   people: require('./people'),
   cars: require('./cars'),
-  color: require('./color')
+  hue: require('./hue'),
+  light: require('./light'),
+  saturation: require('./saturation')
 }

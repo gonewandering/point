@@ -11,7 +11,7 @@ module.exports = async function (url) {
  let color = colors[0].hsl()
  
  this.log.send({
-  event: 'light',
-  value: color[2]
+  event: 'saturation',
+  value: color[1]
  })
 }
