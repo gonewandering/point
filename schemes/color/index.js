@@ -11,7 +11,7 @@ module.exports = async function (url) {
 
  this.log.send({
   event: 'hue',
-  value: color[1]
+  value: color[0]
  })
 
  this.log.send({
