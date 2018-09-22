@@ -1,7 +1,7 @@
 const Device = require('point-device-sdk')
 
 const device = new Device({
-  sensor: require('./sensors/camera'),
+  sensor: require('./sensors/env'),
   schemes: require('./schemes')
 })
 
