@@ -17,7 +17,6 @@
     "node-sense-hat": "0.0.2",
     "point-device-sdk": "git+https://github.com/gonewandering/point-device-sdk.git",
     "request-promise-native": "^1.0.5",
-    "sharp": "^0.20.5",
     "shorthash": "0.0.2",
     "underscore": "^1.9.1"
   }
